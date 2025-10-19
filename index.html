@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ραумєηт мαℓℓz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Efek nebula dan bintang */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 5s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        /* Efek cahaya nebula */
+        .nebula {
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle at 30% 30%, rgba(120, 50, 255, 0.3), transparent 40%),
+                        radial-gradient(circle at 70% 20%, rgba(255, 50, 150, 0.2), transparent 40%),
+                        radial-gradient(circle at 40% 70%, rgba(50, 150, 255, 0.2), transparent 40%);
+            z-index: -1;
+            animation: rotate 60s infinite linear;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Halaman masuk */
+        .entry-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(15, 12, 41, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .entry-content {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            box-shadow: 0 0 50px rgba(120, 50, 255, 0.6);
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .entry-profile {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 40px rgba(120, 50, 255, 0.8);
+            margin-bottom: 25px;
+            animation: pulse 3s infinite;
+        }
+
+        .entry-title {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #ff8a00, #e52e71, #9d50bb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+            font-weight: bold;
+        }
+
+        .entry-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 35px;
+            color: #e0e0e0;
+        }
+
+        .enter-btn {
+            background: linear-gradient(90deg, #ff8a00, #e52e71);
+            border: none;
+            padding: 16px 45px;
+            font-size: 1.3rem;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .enter-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(90deg, #ff9a00, #f53e81);
+        }
+
+        /* Container utama */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        /* Header dengan gambar bulat */
+        .header {
+            text-align: center;
+            margin: 50px 0 40px;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 50px rgba(120, 50, 255, 0.8);
+            margin-bottom: 25px;
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0% { 
+                box-shadow: 0 0 25px rgba(120, 50, 255, 0.7);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 50px rgba(120, 50, 255, 0.9);
+                transform: scale(1.03);
+            }
+            100% { 
+                box-shadow: 0 0 25px rgba(120, 50, 255, 0.7);
+                transform: scale(1);
+            }
+        }
+
+        .welcome-text {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #ff8a00, #e52e71, #9d50bb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            color: #e0e0e0;
+        }
+
+        /* Konten pembayaran */
+        .payment-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 35px;
+            width: 100%;
+            animation: slideUp 1s ease-out;
+        }
+
+        .payment-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 30px;
+            width: 320px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .payment-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .payment-title {
+            font-size: 1.7rem;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #ff8a00;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 138, 0, 0.3);
+        }
+
+        .payment-info {
+            margin-bottom: 18px;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 12px;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .payment-label {
+            font-weight: bold;
+            color: #9d50bb;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            text-shadow: 0 0 5px rgba(157, 80, 187, 0.3);
+        }
+
+        .payment-value {
+            font-size: 1.2rem;
+            user-select: all;
+            -webkit-user-select: all;
+            -moz-user-select: all;
+            -ms-user-select: all;
+            font-weight: 500;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.25);
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .copy-notification {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .qris-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .qris-info {
+            background: rgba(0, 0, 0, 0.25);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .qris-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ff8a00;
+            margin-bottom: 12px;
+            text-shadow: 0 0 8px rgba(255, 138, 0, 0.3);
+        }
+
+        .qris-note {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+
+        .admin-contact {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 138, 0, 0.15);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 138, 0, 0.3);
+        }
+
+        .admin-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 60px;
+            text-align: center;
+            padding: 25px;
+            font-size: 1rem;
+            opacity: 0.8;
+            color: #e0e0e0;
+        }
+
+        /* Animasi */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsif */
+        @media (max-width: 768px) {
+            .welcome-text {
+                font-size: 2.3rem;
+            }
+            
+            .entry-title {
+                font-size: 2.2rem;
+            }
+            
+            .payment-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 25px;
+            }
+            
+            .payment-card {
+                width: 95%;
+                padding: 25px;
+            }
+            
+            .profile-img {
+                width: 170px;
+                height: 170px;
+            }
+            
+            .entry-profile {
+                width: 140px;
+                height: 140px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .welcome-text {
+                font-size: 1.9rem;
+            }
+            
+            .entry-title {
+                font-size: 1.8rem;
+            }
+            
+            .payment-title {
+                font-size: 1.5rem;
+            }
+            
+            .enter-btn {
+                padding: 14px 35px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Halaman masuk -->
+    <div class="entry-screen" id="entryScreen">
+        <div class="entry-content">
+            <img src="https://img1.pixhost.to/images/9528/652824432_uploaded_image.jpg" alt="Profile Mallz" class="entry-profile">
+            <h1 class="entry-title">WELCOME DI ALL PAYMENT MALLZ</h1>
+            <p class="entry-subtitle">Klik tombol di bawah untuk masuk ke halaman pembayaran</p>
+            <button class="enter-btn" id="enterBtn">MASUK</button>
+        </div>
+    </div>
+
+    <!-- Efek nebula -->
+    <div class="nebula"></div>
+    
+    <!-- Efek bintang -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Konten utama -->
+    <div class="container" id="mainContainer">
+        <header class="header">
+            <img src="https://img1.pixhost.to/images/9528/652824432_uploaded_image.jpg" alt="Profile Mallz" class="profile-img">
+            <h1 class="welcome-text">WELCOME DI ALL PAYMENT MALLZ</h1>
+            <p class="subtitle">Pilih metode pembayaran yang Anda inginkan</p>
+        </header>
+
+        <div class="payment-container">
+            <!-- Kartu DANA -->
+            <div class="payment-card">
+                <h2 class="payment-title">DANA</h2>
+                <div class="payment-info">
+                    <div class="payment-label">Nomor Telepon</div>
+                    <div class="payment-value" id="danaNumber">0895428461831</div>
+                    <button class="copy-btn" data-target="danaNumber">Salin</button>
+                </div>
+                <div class="payment-info">
+                    <div class="payment-label">Metode</div>
+                    <div class="payment-value">Transfer DANA</div>
+                </div>
+            </div>
+
+            <!-- Kartu GOPAY -->
+            <div class="payment-card">
+                <h2 class="payment-title">GOPAY</h2>
+                <div class="payment-info">
+                    <div class="payment-label">Nomor Telepon</div>
+                    <div class="payment-value" id="gopayNumber">0895428461831</div>
+                    <button class="copy-btn" data-target="gopayNumber">Salin</button>
+                </div>
+                <div class="payment-info">
+                    <div class="payment-label">Metode</div>
+                    <div class="payment-value">Transfer GOPAY</div>
+                </div>
+            </div>
+
+            <!-- Kartu QRIS -->
+            <div class="payment-card">
+                <h2 class="payment-title">QRIS</h2>
+                <div class="qris-container">
+                    <div class="qris-info">
+                        <div class="qris-name">MINTA ADMIN @MallzOffc</div>
+                        <div class="qris-note">Sebut nominal transfernya saat melakukan pembayaran</div>
+                    </div>
+                    <div class="admin-contact">
+                        <div class="admin-text">Hubungi admin untuk mendapatkan kode QRIS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2023 All Payment Mallz. Semua hak dilindungi.</p>
+            <p>Terima kasih telah menggunakan layanan pembayaran kami</p>
+        </footer>
+    </div>
+
+    <!-- Notifikasi salin -->
+    <div class="copy-notification" id="copyNotification">Nomor berhasil disalin!</div>
+
+    <!-- Audio untuk musik penyambutan -->
+    <audio id="welcomeMusic">
+        <source src="https://files.catbox.moe/xnzfup.mp3" type="audio/mp3">
+        Browser Anda tidak mendukung elemen audio.
+    </audio>
+
+    <script>
+        // Membuat efek bintang
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 250;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Posisi acak
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                
+                // Ukuran acak
+                const size = Math.random() * 3 + 1;
+                
+                // Durasi animasi acak
+                const duration = Math.random() * 5 + 3;
+                
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.animationDuration = `${duration}s`;
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Fungsi untuk menyalin teks
+        function copyToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Tampilkan notifikasi
+            const notification = document.getElementById('copyNotification');
+            notification.style.opacity = '1';
+            setTimeout(() => {
+                notification.style.opacity = '0';
+            }, 2000);
+        }
+
+        // Fungsi untuk masuk ke halaman utama
+        function enterSite() {
+            const entryScreen = document.getElementById('entryScreen');
+            const mainContainer = document.getElementById('mainContainer');
+            const music = document.getElementById('welcomeMusic');
+            
+            // Sembunyikan layar masuk
+            entryScreen.style.opacity = '0';
+            entryScreen.style.visibility = 'hidden';
+            
+            // Tampilkan konten utama
+            mainContainer.style.opacity = '1';
+            
+            // Putar musik
+            music.volume = 0.6;
+            music.play().catch(e => {
+                console.log("Autoplay diblokir oleh browser. Klik di mana saja untuk memutar musik.");
+            });
+            
+            // Musik akan berhenti otomatis ketika selesai
+            music.addEventListener('ended', function() {
+                console.log("Musik selesai diputar");
+            });
+        }
+
+        // Event listener saat halaman dimuat
+        window.addEventListener('load', function() {
+            createStars();
+            
+            // Event listener untuk tombol masuk
+            document.getElementById('enterBtn').addEventListener('click', enterSite);
+            
+            // Event listener untuk tombol salin
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const textToCopy = document.getElementById(targetId).textContent;
+                    copyToClipboard(textToCopy);
+                });
+            });
+            
+            // Memungkinkan pengguna untuk memutar musik dengan mengklik di mana saja
+            document.body.addEventListener('click', function() {
+                const music = document.getElementById('welcomeMusic');
+                if (music.paused && document.getElementById('entryScreen').style.visibility === 'hidden') {
+                    music.play();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
